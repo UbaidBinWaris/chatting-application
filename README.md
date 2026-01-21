@@ -38,10 +38,11 @@ chatting-application/
 
 Before you begin, ensure you have the following installed:
 
-1. **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
-2. **Java JDK** (v17 or higher) - [Download](https://adoptium.net/)
-3. **Maven** (v3.6 or higher) - [Download](https://maven.apache.org/download.cgi)
-4. **PostgreSQL** (v14 or higher) - [Download](https://www.postgresql.org/download/)
+1. **Node.js** (v20 or higher) - [Download](https://nodejs.org/)
+2. **Java JDK** (v21 - LTS) - [Download](https://adoptium.net/)
+3. **PostgreSQL** (v16 or higher) - [Download](https://www.postgresql.org/download/)
+
+> **Note:** Maven is NOT required! This project uses **Spring Boot** which can run directly with Java.
 
 ## 🗄️ Database Setup
 
@@ -87,12 +88,7 @@ psql -U chatting_username -d chatting_app -h localhost
    cd backend
    ```
 
-2. **Install dependencies (Maven will download them automatically):**
-   ```bash
-   mvn clean install
-   ```
-
-3. **Verify database configuration:**
+2. **Verify database configuration:**
    
    The database configuration is in `src/main/resources/application.properties`:
    ```properties
@@ -101,12 +97,23 @@ psql -U chatting_username -d chatting_app -h localhost
    spring.datasource.password=chatting_password
    ```
 
-4. **Run the backend:**
+3. **Build and run the backend:**
+   
+   **Windows:**
    ```bash
-   mvn spring-boot:run
+   .\build.cmd clean install -DskipTests
+   .\run.cmd
+   ```
+   
+   **macOS/Linux:**
+   ```bash
+   chmod +x mvnw
+   ./mvnw spring-boot:run
    ```
 
    The backend will start on `http://localhost:8080`
+
+   > **Important for Windows:** The build scripts (`build.cmd` and `run.cmd`) automatically set JAVA_HOME for you. If you encounter issues, ensure Java 21 is installed at `C:\Program Files\Java\jdk-21`
 
    You should see:
    ```
@@ -132,9 +139,17 @@ psql -U chatting_username -d chatting_app -h localhost
 
    The frontend will start on `http://localhost:3000`
 
-4. **Open your browser:**
-   
-   Navigate to [http://localhost:3000](http://localhost:3000)
+
+**Windows PowerShell:**
+```bash
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+
+**macOS/Linux:**
+```bash
+cd backend
+./mvnwNavigate to [http://localhost:3000](http://localhost:3000)
 
 ## 🎯 Running the Application
 
@@ -165,9 +180,18 @@ GET /api/health
 ### Messages
 ```
 GET  /api/messages          # Get all messages
-POST /api/messages          # Create a new message
-GET  /api/messages/{id}     # Get message by ID
+
+**Windows:**
+```bash
+cd backend
+.\mvnw.cmd clean package
+java -jar target/chatting-backend-1.0.0.jar
 ```
+
+**macOS/Linux:**
+```bash
+cd backend
+./mvnw
 
 ### Example Request (POST /api/messages)
 ```json
@@ -228,7 +252,7 @@ npm start
 2. **Check Java version:**
    ```bash
    java -version
-   # Should be 17 or higher
+   # Should be 21 (LTS) or higher
    ```
 
 ### Frontend Issues
@@ -264,12 +288,20 @@ npm start
 NEXT_PUBLIC_API_URL=http://localhost:8080/api
 ```
 
-### Backend (application.properties)
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/chatting_app
-spring.datasource.username=chatting_username
-spring.datasource.password=chatting_password
+### Backend (Windows)
+```bash
+.\mvnw.cmd spring-boot:run    # Run application
+.\mvnw.cmd clean install      # Build and install dependencies
+.\mvnw.cmd clean package      # Package as JAR
+.\mvnw.cmd test              # Run tests
 ```
+
+### Backend (macOS/Linux)
+```bash
+./mvnw spring-boot:run    # Run application
+./mvnw clean install      # Build and install dependencies
+./mvnw clean package      # Package as JAR
+./mvnw
 
 ## 📖 Additional Scripts
 
