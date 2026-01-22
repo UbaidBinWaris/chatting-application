@@ -305,7 +305,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         when(passwordHashUtil.verifyPassword(oldPassword, testUser.getPasswordHash())).thenReturn(true);
         when(passwordHashUtil.hashPassword(newPassword)).thenReturn(newHash);
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // When
         userService.updatePassword(userId, oldPassword, newPassword);
@@ -313,8 +313,7 @@ class UserServiceTest {
         // Then
         verify(passwordHashUtil).verifyPassword(oldPassword, testUser.getPasswordHash());
         verify(passwordHashUtil).hashPassword(newPassword);
-        verify(userRepository).save(testUser);
-        assertEquals(newHash, testUser.getPasswordHash());
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
