@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class DatabaseConnectionChecker implements ApplicationListener<ApplicationReadyEvent> {
+public class DbConn implements ApplicationListener<ApplicationReadyEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseConnectionChecker.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbConn.class);
 
     private final JdbcTemplate jdbcTemplate;
 
-    public DatabaseConnectionChecker(JdbcTemplate jdbcTemplate) {
+    public DbConn(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
