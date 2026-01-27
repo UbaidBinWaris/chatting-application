@@ -236,6 +236,11 @@ public class ChatService {
             message.getSender().getEmail(),
             message.getContent(),
             message.getMessageType(),
+            message.getFileUrl(),
+            message.getFileName(),
+            message.getFileType(),
+            message.getFileSize(),
+            message.getThumbnailUrl(),
             message.getCreatedAt().format(formatter),
             message.getIsRead()
         );

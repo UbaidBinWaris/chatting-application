@@ -9,6 +9,11 @@ export interface Message {
   senderEmail: string;
   content: string;
   messageType: string;
+  fileUrl?: string;
+  fileName?: string;
+  fileType?: string;
+  fileSize?: number;
+  thumbnailUrl?: string;
   createdAt: string;
   isRead: boolean;
 }
