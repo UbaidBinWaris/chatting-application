@@ -49,6 +49,7 @@ public class AuthController {
     }
 
     // Temporary utility endpoint to generate password hashes
+    // SECURITY: Uncomment only when needed to generate password hashes, then comment back
 //    @GetMapping("/hash")
 //    public String generateHash(@RequestParam String password, HttpServletRequest request) {
 //        String remoteAddr = request.getRemoteAddr();
@@ -58,4 +59,5 @@ public class AuthController {
 //        }
 //        return passwordUtil.hashPassword(password);
 //    }
+
 }
