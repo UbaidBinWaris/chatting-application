@@ -71,3 +71,24 @@ export const fetchWithAuth = async (
     headers,
   });
 };
+
+// Make authenticated API request and parse JSON response
+export const apiRequest = async <T = any>(
+  url: string,
+  options: RequestInit = {}
+): Promise<T> => {
+  const response = await fetchWithAuth(url, options);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || `HTTP error! status: ${response.status}`);
+  }
+
+  // Handle empty responses (like DELETE requests)
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  }
+  
+  return null as T;
+};

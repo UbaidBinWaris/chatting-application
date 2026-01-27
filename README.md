@@ -71,13 +71,39 @@ GRANT ALL PRIVILEGES ON DATABASE chatting_app TO chatting_username;
 GRANT ALL ON SCHEMA public TO chatting_username;
 ```
 
-### 3. Verify Connection
+### 3. Run Chat Schema Migration
 
-Test the connection:
+After creating the database and user, run the chat schema migration:
+
 ```bash
-psql -U chatting_username -d chatting_app -h localhost
-# Enter password: chatting_password
+psql -U chatting_username -d chatting_app -h localhost -f backend/database/chat_schema.sql
 ```
+
+Or using pgAdmin:
+1. Connect to `chatting_app` database
+2. Open Query Tool
+3. Load and execute `backend/database/chat_schema.sql`
+
+This will create the following tables:
+- `users` - User accounts
+- `conversations` - Chat conversations (direct and group)
+- `conversation_participants` - Conversation membership
+- `messages` - Chat messages
+- `message_read_receipts` - Message read tracking
+
+### 4. Verify Tables
+
+Verify all tables were created:
+```sql
+\dt
+```
+
+You should see:
+- conversations
+- conversation_participants
+- messages
+- message_read_receipts
+- users
 
 ## 🚀 Installation & Setup
 
@@ -172,14 +198,45 @@ npm run dev
 
 ## 📡 API Endpoints
 
-### Health Check
+### Authentication
 ```
-GET /api/health
+POST /api/auth/register      # Register new user
+POST /api/auth/login         # Login user
+```
+
+### Users
+```
+GET  /api/users/me           # Get current user
+GET  /api/users/search?query={query}  # Search users
+```
+
+### Conversations
+```
+GET  /api/chat/conversations                    # Get all user's conversations
+POST /api/chat/conversations/direct?otherUserId={id}  # Create direct chat
+POST /api/chat/conversations/group              # Create group chat
+GET  /api/chat/conversations/{id}/messages      # Get conversation messages
 ```
 
 ### Messages
 ```
-GET  /api/messages          # Get all messages
+POST /api/chat/messages                         # Send a message
+```
+
+### Group Management (Admin only)
+```
+POST /api/chat/conversations/{id}/participants?userId={id}     # Add participant
+DELETE /api/chat/conversations/{id}/participants/{userId}      # Remove participant
+PUT  /api/chat/conversations/{id}/participants/{userId}/admin  # Make admin
+```
+
+### WebSocket
+```
+WS   /ws                     # WebSocket connection endpoint
+     /app/chat.send          # Send message
+     /app/chat.typing        # Send typing indicator
+     /topic/conversation.{id} # Subscribe to conversation messages
+```
 
 **Windows:**
 ```bash
@@ -273,13 +330,18 @@ npm start
 
 ## 📚 Project Features
 
-- ✅ Real-time messaging
-- ✅ PostgreSQL database integration
-- ✅ RESTful API
-- ✅ WebSocket support (configured)
-- ✅ CORS enabled
-- ✅ TypeScript support
-- ✅ Responsive design
+- ✅ **Real-time messaging** - WebSocket-based instant messaging
+- ✅ **Direct messaging** - One-on-one private conversations
+- ✅ **Group chats** - Create and manage group conversations
+- ✅ **Admin management** - Group admins can manage participants
+- ✅ **Message history** - Persistent message storage
+- ✅ **Read receipts** - Track message read status
+- ✅ **User search** - Find users to start conversations
+- ✅ **PostgreSQL database** - Reliable data persistence
+- ✅ **JWT authentication** - Secure token-based auth
+- ✅ **RESTful API** - Clean API design
+- ✅ **TypeScript** - Type-safe frontend
+- ✅ **Responsive design** - Works on all devices
 
 ## 🔐 Environment Variables
 

@@ -64,6 +64,8 @@ export default function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
+          suppressHydrationWarning
         />
 
         <input
@@ -73,6 +75,8 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete="current-password"
+          suppressHydrationWarning
         />
 
         <button

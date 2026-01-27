@@ -86,6 +86,8 @@ export default function RegisterPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
+          suppressHydrationWarning
         />
 
         <input
@@ -96,6 +98,8 @@ export default function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
+          autoComplete="new-password"
+          suppressHydrationWarning
         />
 
         <input
@@ -106,6 +110,8 @@ export default function RegisterPage() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           minLength={6}
+          autoComplete="new-password"
+          suppressHydrationWarning
         />
 
         <button
