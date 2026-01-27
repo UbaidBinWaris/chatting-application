@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Conversation, Message } from '@/lib/websocket';
 
 interface ChatMessageProps {
@@ -10,20 +10,20 @@ interface ChatMessageProps {
 
 function ChatMessage({ message, isOwnMessage }: ChatMessageProps) {
   return (
-    <div className={`mb-4 flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
+    <div className={`mb-1 flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
       <div
-        className={`max-w-[70%] rounded-lg px-4 py-2 ${
+        className={`max-w-[70%] px-4 py-2 shadow-sm ${
           isOwnMessage
-            ? 'bg-blue-600 text-white'
-            : 'bg-zinc-800 text-zinc-100'
+            ? 'bg-[#005c4b] text-white rounded-l-lg rounded-br-none rounded-tr-lg'
+            : 'bg-[#202c33] text-zinc-100 rounded-r-lg rounded-bl-none rounded-tl-lg'
         }`}
       >
         {!isOwnMessage && (
-          <div className="text-xs font-semibold mb-1 text-zinc-400">{message.senderEmail}</div>
+          <div className="text-xs font-bold mb-1 text-orange-400">{message.senderEmail}</div>
         )}
-        <div className="break-words">{message.content}</div>
-        <div className={`text-xs mt-1 ${isOwnMessage ? 'text-blue-100' : 'text-zinc-400'}`}>
-          {new Date(message.createdAt).toLocaleTimeString()}
+        <div className="break-words text-sm leading-relaxed">{message.content}</div>
+        <div className={`text-[10px] mt-1 text-right ${isOwnMessage ? 'text-zinc-300' : 'text-zinc-400'}`}>
+          {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
       </div>
     </div>
@@ -34,6 +34,7 @@ interface ChatWindowProps {
   conversation: Conversation | null;
   messages: Message[];
   currentUserEmail: string;
+  currentUserId: number | null;
   onSendMessage: (content: string) => void;
 }
 
@@ -41,9 +42,19 @@ export default function ChatWindow({
   conversation,
   messages,
   currentUserEmail,
+  currentUserId,
   onSendMessage,
 }: ChatWindowProps) {
   const [messageInput, setMessageInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = () => {
     if (messageInput.trim() && conversation) {
@@ -85,20 +96,21 @@ export default function ChatWindow({
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
+      <div className="flex-1 overflow-y-auto px-6 py-4 bg-[#0b141a]"> {/* Added WhatsApp dark background color */}
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-zinc-500">No messages yet. Start the conversation!</p>
           </div>
         ) : (
-          <div className="flex flex-col-reverse">
+          <div className="flex flex-col gap-2"> {/* Removed flex-col-reverse */}
             {messages.map((message) => (
               <ChatMessage
                 key={message.id}
                 message={message}
-                isOwnMessage={message.senderEmail === currentUserEmail}
+                isOwnMessage={message.senderId === currentUserId}
               />
             ))}
+            <div ref={messagesEndRef} />
           </div>
         )}
       </div>

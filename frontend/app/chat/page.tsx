@@ -16,6 +16,7 @@ export default function ChatPage() {
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentUserEmail, setCurrentUserEmail] = useState('');
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +54,7 @@ export default function ChatPage() {
       const user = await chatApi.getCurrentUser();
       console.log('User loaded:', user.email);
       setCurrentUserEmail(user.email);
+      setCurrentUserId(user.id);
 
       // Load conversations
       const convs = await chatApi.getConversations();
@@ -154,6 +156,7 @@ export default function ChatPage() {
         conversation={selectedConversation}
         messages={messages}
         currentUserEmail={currentUserEmail}
+        currentUserId={currentUserId}
         onSendMessage={handleSendMessage}
       />
       <NewChatModal
