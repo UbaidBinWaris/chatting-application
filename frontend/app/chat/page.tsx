@@ -131,10 +131,10 @@ export default function ChatPage() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="flex items-center justify-center h-screen bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-600">Loading chat...</p>
+          <p className="text-xl text-foreground">Loading chat...</p>
         </div>
       </div>
     );

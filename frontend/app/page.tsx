@@ -16,7 +16,7 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
       <div className="max-w-2xl text-center px-4">
         <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
           Welcome to Chatting App
